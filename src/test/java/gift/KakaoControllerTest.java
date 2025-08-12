@@ -97,4 +97,4 @@ public class KakaoControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("register");
     }
-
+}

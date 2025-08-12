@@ -1,13 +1,19 @@
 package gift.controller;
 
 import gift.dto.KakaoTokenDto;
-import gift.service.*;
+import gift.service.KakaoService;
+import gift.service.KakaoTokenService;
+import gift.service.OptionService;
+import gift.service.WishlistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/products")
@@ -19,7 +25,6 @@ public class ProductRestController {
     private final KakaoTokenService kakaoTokenService;
     private final KakaoService kakaoService;
 
-    @Autowired
     public ProductRestController(OptionService optionService, WishlistService wishlistService, KakaoService kakaoService, KakaoTokenService kakaoTokenService) {
         this.optionService = optionService;
         this.wishlistService = wishlistService;
@@ -33,7 +38,6 @@ public class ProductRestController {
     public ResponseEntity<Void> orderItem(@RequestParam("email") String email, @RequestParam("optionId") Long optionId, @RequestParam("quantity") int quantity, @PathVariable Long productId, @RequestParam("message") String message) {
         optionService.subtractOptionQuantity(optionId, quantity);
         wishlistService.deleteWishlistItem(email, productId);
-        System.out.println(message);
         KakaoTokenDto tokenDto = kakaoTokenService.getTokenByEmail(email);
         String accessToken = tokenDto.getAccessToken();
         kakaoService.sendKakaoMessage(accessToken, message);

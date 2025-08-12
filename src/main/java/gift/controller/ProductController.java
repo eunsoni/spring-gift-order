@@ -1,20 +1,21 @@
 package gift.controller;
 
-import gift.dto.KakaoTokenDto;
 import gift.dto.ProductDto;
 import gift.entity.Category;
 import gift.entity.Product;
-import gift.service.*;
+import gift.service.CategoryService;
+import gift.service.OptionService;
+import gift.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -26,18 +27,11 @@ public class ProductController {
     private final CategoryService categoryService;
     private final ProductService productService;
     private OptionService optionService;
-    private WishlistService wishlistService;
-    private final KakaoTokenService kakaoTokenService;
-    private final KakaoService kakaoService;
 
-    @Autowired
-    public ProductController(CategoryService categoryService, ProductService productService, OptionService optionService, WishlistService wishlistService, KakaoService kakaoService, KakaoTokenService kakaoTokenService) {
+    public ProductController(CategoryService categoryService, ProductService productService, OptionService optionService) {
         this.categoryService = categoryService;
         this.productService = productService;
         this.optionService = optionService;
-        this.wishlistService = wishlistService;
-        this.kakaoService = kakaoService;
-        this.kakaoTokenService = kakaoTokenService;
     }
 
     @PostMapping("/add")
